@@ -39,6 +39,22 @@ var fileLoad = function(req, callback) {
   });
 };
 
+// Gather POST data
+var gatherPostData = function(request, response) {
+  var body = '';
+
+  request.on('data', function(chunk){
+    body += chunk.toString();
+  });
+
+  request.on('end', function() {
+    var postData = body;//JSON.parse(body);
+    // do something with this data
+    console.log(postData);
+  });
+
+};
+
 var routes = {
   "\/": function(req, res){
     fileLoad(req, function(data, statusCode){
@@ -54,7 +70,6 @@ var routes = {
     sendResponse(res, null, 404);
   },
   "archives": function(req, res){
-    var destination = req.url.split('/').pop();
     fileLoad(req, function(data, statusCode){
       sendResponse(res, data, statusCode);
     });
@@ -74,8 +89,16 @@ var routerLogic = function(url){
 
 var actions = {
   "POST": function(req, res){
+    //check if on sites.txt
+      //if not - append to
+      //send to loading.html
+    //if on sites.txt
+      //go to archived version
+
+    gatherPostData(req, res);
     var route = routerLogic(req.url);
     route(req, res);
+
   },
   "GET": function(req, res){
     var route = routerLogic(req.url);
@@ -89,14 +112,9 @@ var actions = {
 
 exports.handleRequest = function (req, res) {
 
-  // if(req.url.indexOf('archive') > -1){
-  //   var blah = req.url.split('/');
-  //   console.log(blah);
-  // }
-
   var action = actions[req.method];
   if(action){
     action(req, res);
   }
-  //res.end(archive.paths.list);
+
 };
