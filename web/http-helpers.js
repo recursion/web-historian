@@ -44,7 +44,6 @@ exports.fileLoad = fileLoad = function(req, callback) {
         if (error) {
           callback(null, 500);
         } else {
-          console.log(content);
           callback(content, 200);
         }
       });
