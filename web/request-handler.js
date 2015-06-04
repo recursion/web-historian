@@ -24,28 +24,16 @@ var findPath = function(url) {
 
 var fileLoad = function(req, callback) {
   var filePath = findPath(req.url);
-  console.log(filePath);
-
-  // var filePath = __dirname + '/public' + req.url; // = ./public + req.url || ./public/index.html
-  // console.log(filePath);
-  // if (filePath === __dirname + '/public/') {
-  //   filePath = __dirname + '/public/index.html';
-  // }
-
   fs.exists(filePath, function(exists) {
-    console.log(exists);
     if (exists) {
       fs.readFile(filePath, function(error, content) {
-        console.log(error);
         if (error) {
           callback(null, 500);
-        }
-        else {
+        } else {
           callback(content, 200);
         }
       });
-    }
-    else {
+    } else {
       callback(null, 404);
     }
   });
@@ -67,8 +55,6 @@ var routes = {
   },
   "archives": function(req, res){
     var destination = req.url.split('/').pop();
-    console.log("You've arrived at: " + destination);
-    console.log(req.url);
     fileLoad(req, function(data, statusCode){
       sendResponse(res, data, statusCode);
     });
