@@ -8,16 +8,10 @@ var urlParser = require('url');
 var sites = {
   addToSites: function(info, callback){
     this[info] = 1;
-    //append to sites.txt
-    //fs.appendFileSync(__dirname.slice(0,-4) + '/archives/sites.txt', info);
     fs.writeFile(archive.paths.list, info + "\n", function (err) {
       if (err) throw err;
       callback();
     });
-    // fs.appendFile(__dirname.slice(0,-4) + '/archives/sites.txt', info + "\n", function (err) {
-    //   if (err) throw err;
-    //   callback();
-    // });
   }
 };
 
@@ -36,12 +30,13 @@ var routes = {
     sendResponse(res, null, 404);
   },
   "archives": function(req, res){
+    console.log('got to archives');
     httphelpers.fileLoad(req, function(data, statusCode){
       httphelpers.sendResponse(res, data, statusCode);
     });
   },
   "redirect": function(req, res){
-    //req.url = '/loading.html';
+    req.url = '/loading.html';
     httphelpers.fileLoad(req, function(data, statusCode){
       httphelpers.sendResponse(res, data, 302);
     });
@@ -62,7 +57,7 @@ var routerLogic = function(url){
 var actions = {
   "POST": function(req, res){
     httphelpers.gatherPostData(req, res, function (url) {
-      console.log(url);
+      // console.log(url);
       if(sites[url]){
         // should this be req.url or just url?
         var route = routerLogic(req.url);

@@ -30,7 +30,7 @@ exports.findPath = findPath = function(url) {
   if(url === "/"){
     filePath = __dirname + '/public/index.html';
   } else if (url.indexOf("archive") > -1){
-    filePath = archive.archivedSites + url.split('/').pop();
+    filePath = archive.paths.archivedSites + "/" + url.split('/').pop();
   }
   return filePath;
 };
@@ -38,12 +38,15 @@ exports.findPath = findPath = function(url) {
 // load files
 exports.fileLoad = fileLoad = function(req, callback) {
   var filePath = findPath(req.url);
+  console.log(filePath);
   fs.exists(filePath, function(exists) {
+    console.log(exists);
     if (exists) {
       fs.readFile(filePath, function(error, content) {
         if (error) {
           callback(null, 500);
         } else {
+          console.log(filePath + ' exists is: ' + exists + ' and is going to return 200');
           callback(content, 200);
         }
       });
