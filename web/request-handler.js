@@ -3,13 +3,21 @@ var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 var httphelpers = require('./http-helpers');
 var urlParser = require('url');
+
+
 var sites = {
-  addToSites: function(info){
+  addToSites: function(info, callback){
     this[info] = 1;
     //append to sites.txt
-    fs.appendFile(__dirname.slice(0,-4) + '/archives/sites.txt', info + "\n", function (err) {
+    //fs.appendFileSync(__dirname.slice(0,-4) + '/archives/sites.txt', info);
+    fs.writeFile(archive.paths.list, info + "\n", function (err) {
       if (err) throw err;
+      callback();
     });
+    // fs.appendFile(__dirname.slice(0,-4) + '/archives/sites.txt', info + "\n", function (err) {
+    //   if (err) throw err;
+    //   callback();
+    // });
   }
 };
 
@@ -33,9 +41,9 @@ var routes = {
     });
   },
   "redirect": function(req, res){
-    req.url = '/loading.html';
+    //req.url = '/loading.html';
     httphelpers.fileLoad(req, function(data, statusCode){
-      httphelpers.sendResponse(res, data, statusCode);
+      httphelpers.sendResponse(res, data, 302);
     });
   }
 };
@@ -60,8 +68,9 @@ var actions = {
         var route = routerLogic(req.url);
         route(req, res);
       } else {
-        sites.addToSites(url);
-        routes['redirect'](req, res);
+        sites.addToSites(url, function() {
+          routes['redirect'](req, res);
+        });
       }
     });
   },

@@ -30,7 +30,7 @@ exports.findPath = findPath = function(url) {
   if(url === "/"){
     filePath = __dirname + '/public/index.html';
   } else if (url.indexOf("archive") > -1){
-    filePath = __dirname.slice(0,-4) + '/archives/sites/' + url.split('/').pop();
+    filePath = archive.archivedSites + url.split('/').pop();
   }
   return filePath;
 };
@@ -44,6 +44,7 @@ exports.fileLoad = fileLoad = function(req, callback) {
         if (error) {
           callback(null, 500);
         } else {
+          console.log(content);
           callback(content, 200);
         }
       });
