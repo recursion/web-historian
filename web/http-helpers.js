@@ -15,6 +15,7 @@ exports.serveAssets = function(res, asset, callback) {
   // (Static files are things like html (yours or archived from others...), css, or anything that doesn't change often.)
 };
 
+// construct an http response and send it out
 exports.sendResponse = sendResponse = function(res, data, status, type){
   status = status || 200;
   type = type || "text/html";
@@ -23,6 +24,7 @@ exports.sendResponse = sendResponse = function(res, data, status, type){
   res.end(data);
 };
 
+// find the path of a given url
 exports.findPath = findPath = function(url) {
   var filePath = __dirname + '/public' + url;
   if(url === "/"){
@@ -33,6 +35,7 @@ exports.findPath = findPath = function(url) {
   return filePath;
 };
 
+// load files
 exports.fileLoad = fileLoad = function(req, callback) {
   var filePath = findPath(req.url);
   fs.exists(filePath, function(exists) {
@@ -65,16 +68,3 @@ exports.gatherPostData = gatherPostData = function(request, response) {
   });
 
 };
-
-var routerLogic = function(url){
-  var re = /archive.+/g;
-  if (re.test(url)) {
-    return routes["archives"];
-  } else if (routes[url]){
-    return routes[url];
-  } else {
-    return routes["bad"];
-  }
-}
-
-// As you progress, keep thinking about what helper functions you can put here!
