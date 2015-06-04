@@ -19,8 +19,8 @@ exports.serveAssets = function(res, asset, callback) {
 exports.sendResponse = sendResponse = function(res, data, status, type){
   status = status || 200;
   type = type || "text/html";
-  httphelpers.headers["Content-Type"] = type;
-  res.writeHead(status, httphelpers.headers);
+  headers["Content-Type"] = type;
+  res.writeHead(status, headers);
   res.end(data);
 };
 
@@ -54,7 +54,7 @@ exports.fileLoad = fileLoad = function(req, callback) {
 };
 
 // Gather POST data
-exports.gatherPostData = gatherPostData = function(request, response) {
+exports.gatherPostData = gatherPostData = function(request, response, callback) {
   var body = '';
 
   request.on('data', function(chunk){
@@ -62,9 +62,8 @@ exports.gatherPostData = gatherPostData = function(request, response) {
   });
 
   request.on('end', function() {
-    var postData = body;//JSON.parse(body);
-    // do something with this data
-    console.log(postData);
+    var url = body.split('=').pop();
+    callback(url);
   });
 
 };
