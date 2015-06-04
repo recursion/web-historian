@@ -7,6 +7,9 @@ var sites = {
   addToSites: function(info){
     this[info] = 1;
     //append to sites.txt
+    fs.appendFile(__dirname.slice(0,-4) + '/archives/sites.txt', info + "\n", function (err) {
+      if (err) throw err;
+    });
   }
 };
 
