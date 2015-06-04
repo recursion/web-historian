@@ -28,6 +28,9 @@ exports.Response = function() {
   this._responseCode = null;
   this._headers = null;
   this._data = "";
+  this._writableState = {};
+  this._writableState.needDrain = false;
+
   var self = this;
   this.write = function (data) { self._data += data; }
   this.writeHead = function(responseCode, headers) {
@@ -38,4 +41,9 @@ exports.Response = function() {
     self._ended = true;
     self._data += data || "";
   }
+  this.emit = function(){};
+  this.once = function(){};
+  this.addListener = function(){};
+  this.removeListener = function(){};
+  this.on = this.addListener;
 };
