@@ -30,7 +30,6 @@ var routes = {
     sendResponse(res, null, 404);
   },
   "archives": function(req, res){
-    console.log('got to archives');
     httphelpers.fileLoad(req, function(data, statusCode){
       httphelpers.sendResponse(res, data, statusCode);
     });
@@ -44,7 +43,7 @@ var routes = {
 };
 
 var routerLogic = function(url){
-  var re = /archive.+/g;
+  var re = /\.com/g;
   if (re.test(url)) {
     return routes["archives"];
   } else if (routes[url]){
@@ -57,7 +56,6 @@ var routerLogic = function(url){
 var actions = {
   "POST": function(req, res){
     httphelpers.gatherPostData(req, res, function (url) {
-      // console.log(url);
       if(sites[url]){
         // should this be req.url or just url?
         var route = routerLogic(req.url);
